@@ -3,9 +3,9 @@ type TCoordenadas = {
   y: number;
 };
 
-interface IInitialPoint {
+type TInitialPoint = {
   nome: string;
   coordenadas: TCoordenadas;
-}
+};
 
-export { TCoordenadas, IInitialPoint };
+export { TCoordenadas, TInitialPoint };

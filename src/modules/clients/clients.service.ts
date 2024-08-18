@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import * as format from 'pg-format';
 import { Client } from './entities/client.entity';
-import { IInitialPoint, TCoordenadas } from './interfaces/client.interfaces';
+import { TInitialPoint, TCoordenadas } from './interfaces/client.interfaces';
 
 @Injectable()
 export class ClientsService {
@@ -28,10 +28,27 @@ export class ClientsService {
   async findAll(query: Record<string, string> | {}) {
     const paramsCount = Object.keys(query).length;
 
-    if (paramsCount > 0) {
+    if (paramsCount === 1) {
       const queryString: string = format(
         `SELECT * FROM clientes
         WHERE %I = %L;`,
+        Object.keys(query),
+        Object.values(query),
+      );
+
+      const queryResult = await this.conn.query(queryString);
+
+      if (!queryResult.rows[0]) {
+        throw new NotFoundException('User not found!');
+      }
+
+      return queryResult.rows[0];
+    }
+
+    if (paramsCount > 1) {
+      const queryString: string = format(
+        `SELECT * FROM clientes
+        WHERE (%I) IN (ROW(%L));`,
         Object.keys(query),
         Object.values(query),
       );
@@ -63,12 +80,12 @@ export class ClientsService {
     const getDbClients = await this.conn.query(`SELECT * FROM clientes;`);
     let allClients = getDbClients.rows;
 
-    const initialPoint: IInitialPoint = {
+    const initialPoint: TInitialPoint = {
       nome: 'Empresa',
       coordenadas: { x: 0, y: 0 },
     };
 
-    const route: Array<Client | IInitialPoint> = [initialPoint];
+    const route: Array<Client | TInitialPoint> = [initialPoint];
 
     let currentPoint = route[0].coordenadas;
 

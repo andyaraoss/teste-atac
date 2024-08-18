@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { Pool } from 'pg';
 import 'dotenv/config';
-import path from 'path';
 
 const dbProvider = {
   provide: 'PG_CONNECTION',
