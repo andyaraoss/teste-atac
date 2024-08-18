@@ -38,7 +38,7 @@ export class ClientsService {
       const queryResult = await this.conn.query(queryString);
 
       if (!queryResult.rows[0]) {
-        throw new NotFoundException('User not found !');
+        throw new NotFoundException('User not found!');
       }
 
       return queryResult.rows[0];
@@ -50,8 +50,6 @@ export class ClientsService {
   }
 
   async findBestRoute() {
-    // Função para calcular a distância euclidiana entre a empresa e um clinte
-
     const calculateDistance = (
       client1: Coordenadas,
       client2: Coordenadas,
@@ -66,22 +64,25 @@ export class ClientsService {
 
     const initialPoint = { nome: 'Empresa', coordenadas: { x: 0, y: 0 } };
 
-    const route: Array<Client | any> = [initialPoint]; // Começa na empresa
+    const route: Array<Client | any> = [initialPoint];
 
     let currentPoint = route[0].coordenadas;
 
     allClients.forEach(() => {
-      const nearestClient = allClients.reduce((nearest, client) =>
-        calculateDistance(currentPoint, client.coordenadas) <
-        calculateDistance(currentPoint, nearest.coordenadas)
-          ? client
-          : nearest,
+      const nearestClient: Client = allClients.reduce(
+        (nearest: Client, client: Client) =>
+          calculateDistance(currentPoint, client.coordenadas) <
+          calculateDistance(currentPoint, nearest.coordenadas)
+            ? client
+            : nearest,
       );
 
       route.push(nearestClient);
       currentPoint = nearestClient.coordenadas;
 
-      allClients = allClients.filter((client) => client !== nearestClient);
+      allClients = allClients.filter(
+        (client: Client) => client !== nearestClient,
+      );
     });
 
     route.push(initialPoint);

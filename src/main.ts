@@ -9,8 +9,8 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Teste Tecnico')
-    .setDescription('Teste Tecnico')
+    .setTitle('Teste Técnico ATAC')
+    .setDescription('Documentação criada para informação e teste de rotas.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
