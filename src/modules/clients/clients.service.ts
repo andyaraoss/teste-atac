@@ -1,7 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import * as format from 'pg-format';
-import { Client, Coordenadas } from './entities/client.entity';
+import { Client } from './entities/client.entity';
+import { IInitialPoint, TCoordenadas } from './interfaces/client.interfaces';
 
 @Injectable()
 export class ClientsService {
@@ -51,8 +52,8 @@ export class ClientsService {
 
   async findBestRoute() {
     const calculateDistance = (
-      client1: Coordenadas,
-      client2: Coordenadas,
+      client1: TCoordenadas,
+      client2: TCoordenadas,
     ): number => {
       return Math.sqrt(
         (client1.x - client2.x) ** 2 + (client1.y - client2.y) ** 2,
@@ -62,9 +63,12 @@ export class ClientsService {
     const getDbClients = await this.conn.query(`SELECT * FROM clientes;`);
     let allClients = getDbClients.rows;
 
-    const initialPoint = { nome: 'Empresa', coordenadas: { x: 0, y: 0 } };
+    const initialPoint: IInitialPoint = {
+      nome: 'Empresa',
+      coordenadas: { x: 0, y: 0 },
+    };
 
-    const route: Array<Client | any> = [initialPoint];
+    const route: Array<Client | IInitialPoint> = [initialPoint];
 
     let currentPoint = route[0].coordenadas;
 
