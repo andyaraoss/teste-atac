@@ -20,7 +20,7 @@ export class CreateClientDto {
   @ApiProperty({ description: 'Telefone do cliente', default: '11999999700' })
   @IsString()
   @IsNotEmpty()
-  @Length(11)
+  @Length(10, 11)
   telefone: string;
 
   @ApiProperty({

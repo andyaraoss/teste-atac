@@ -42,7 +42,7 @@ export class ClientsService {
         throw new NotFoundException('User not found!');
       }
 
-      return queryResult.rows[0];
+      return queryResult.rows;
     }
 
     if (paramsCount > 1) {
@@ -59,7 +59,7 @@ export class ClientsService {
         throw new NotFoundException('User not found!');
       }
 
-      return queryResult.rows[0];
+      return queryResult.rows;
     }
 
     const queryResult = await this.conn.query(`SELECT * FROM clientes;`);
